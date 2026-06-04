@@ -1,0 +1,14 @@
+.venv/
+.venv312/
+__pycache__/
+*.pyc
+*.db
+.env
+service_account.json
+secure_vault/
+test_*.py
+test_out*.txt
+.pytest_cache/
+*.egg-info/
+dist/
+build/

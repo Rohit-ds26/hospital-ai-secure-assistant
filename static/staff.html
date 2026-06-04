@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Staff Assistant</title>
+  <link rel="stylesheet" href="/static/style.css?v=vault-6">
+</head>
+
+<body data-chatbot="staff">
+  <main class="shell">
+    <section class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">+</div>
+        <div>
+          <h1>Staff Console</h1>
+          <p>Internal hospital workflow</p>
+        </div>
+      </div>
+
+      <div class="panel bot-panel">
+        <h2>Staff Assistant</h2>
+        <div class="bot-selector" id="botSelector"></div>
+        <p id="botAccessNote" class="access-note"></p>
+      </div>
+
+      <form id="loginForm" class="panel login-panel">
+        <h2>Staff Sign In</h2>
+        <label for="loginUser">Username</label>
+        <input id="loginUser" autocomplete="username" value="doctor1">
+        <label for="loginPass">Password</label>
+        <input id="loginPass" type="password" autocomplete="current-password" value="Doctor@123">
+        <button type="submit" id="loginBtn">Sign in</button>
+        <p id="loginError" class="error" hidden>Invalid credentials or role not allowed for this chatbot.</p>
+      </form>
+
+      <div class="panel">
+        <h2>Staff Demo Accounts</h2>
+        <div class="account-grid" id="accountGrid"></div>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="botEyebrow">Internal staff operations</p>
+          <h2 id="botTitle">Hospital Staff Assistant</h2>
+          <p class="topbar-copy" id="botSummary">A workflow assistant for clinical and operational staff.</p>
+        </div>
+        <div class="session-card" id="sessionCard">
+          <span class="status-dot"></span>
+          <div>
+            <strong id="sessionName">Not signed in</strong>
+            <small id="sessionRole">No active role</small>
+          </div>
+        </div>
+      </header>
+
+      <section class="main-grid">
+        <article class="panel chat-panel">
+          <div class="section-head">
+            <div>
+              <h2>Staff Chat</h2>
+              <p id="chatSurfaceHelp">Use normal staff workflows. Each role only sees its own allowed tools.</p>
+            </div>
+          </div>
+          <div id="chatMessages" class="messages">
+            <div class="message assistant">Sign in as hospital staff to work with role-limited tools.</div>
+          </div>
+          <div class="quick-actions" id="quickActions"></div>
+          <form id="chatForm" class="chat-form">
+            <input id="chatInput" placeholder="Ask the staff assistant..." disabled>
+            <button id="sendBtn" type="submit" disabled>Send</button>
+          </form>
+        </article>
+
+        <aside class="right-rail">
+          <article class="panel">
+            <h2>Allowed Tools</h2>
+            <p class="muted">Tools update after login based on staff role.</p>
+            <div id="toolsList" class="tools-list"><span>Sign in to view tools</span></div>
+          </article>
+          <article class="panel">
+            <h2>Direct Tool Test</h2>
+            <p class="muted">Useful for RBAC testing without model planning.</p>
+            <label for="toolSelect">Tool</label>
+            <select id="toolSelect" disabled></select>
+            <label for="toolArgs">Arguments JSON</label>
+            <textarea id="toolArgs" rows="5" disabled>{"patient_id": 1}</textarea>
+            <button id="invokeBtn" disabled>Invoke tool</button>
+            <pre id="toolOutput">No tool result yet.</pre>
+          </article>
+        </aside>
+      </section>
+    </section>
+  </main>
+
+  <script src="/static/app.js?v=vault-6"></script>
+</body>
+
+</html>

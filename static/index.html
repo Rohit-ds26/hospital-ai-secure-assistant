@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital AI System</title>
+  <link rel="stylesheet" href="/static/style.css?v=vault-6">
+</head>
+
+<body>
+  <main class="shell">
+    <section class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">+</div>
+        <div>
+          <h1>Hospital AI</h1>
+          <p>Role-separated assistant testbed</p>
+        </div>
+      </div>
+
+      <div class="panel bot-panel">
+        <h2>Chatbot Surface</h2>
+        <div class="bot-selector" id="botSelector">
+          <button type="button" data-bot="patient" class="active">
+            <strong>Patient</strong>
+            <span>Public FAQs or signed-in patient</span>
+          </button>
+          <button type="button" data-bot="staff">
+            <strong>Staff</strong>
+            <span>Internal hospital staff</span>
+          </button>
+          <button type="button" data-bot="management">
+            <strong>Management</strong>
+            <span>Admin and supervisor</span>
+          </button>
+        </div>
+        <p id="botAccessNote" class="access-note"></p>
+      </div>
+
+      <form id="loginForm" class="panel login-panel">
+        <h2>Sign In</h2>
+        <label for="loginUser">Username</label>
+        <input id="loginUser" autocomplete="username" value="patient1">
+
+        <label for="loginPass">Password</label>
+        <input id="loginPass" type="password" autocomplete="current-password" value="Patient@123">
+
+        <button type="submit" id="loginBtn">Sign in</button>
+        <p id="loginError" class="error" hidden>Invalid credentials or server unavailable.</p>
+      </form>
+
+      <div class="panel">
+        <h2>Demo Accounts</h2>
+        <div class="account-grid" id="accountGrid"></div>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="botEyebrow">Patient information and care</p>
+          <h2 id="botTitle">Patient Assistant</h2>
+          <p class="topbar-copy" id="botSummary">General hospital help before login, personal services after patient sign-in.</p>
+        </div>
+        <div class="session-card" id="sessionCard">
+          <span class="status-dot"></span>
+          <div>
+            <strong id="sessionName">Not signed in</strong>
+            <small id="sessionRole">No active role</small>
+          </div>
+        </div>
+      </header>
+
+      <section class="metrics">
+        <article>
+          <span>Patients</span>
+          <strong>5</strong>
+          <small>Synthetic records</small>
+        </article>
+        <article>
+          <span>Doctors</span>
+          <strong>3</strong>
+          <small>Assigned care teams</small>
+        </article>
+        <article>
+          <span>Lab Reports</span>
+          <strong>9</strong>
+          <small>Diagnostics dataset</small>
+        </article>
+        <article>
+          <span>Audit Logs</span>
+          <strong>6</strong>
+          <small>Security events</small>
+        </article>
+      </section>
+
+      <section class="main-grid">
+        <article class="panel chat-panel">
+          <div class="section-head">
+            <div>
+              <h2>AI Chat</h2>
+              <p id="chatSurfaceHelp">Ask patient-facing questions. Backend RBAC still controls every tool call.</p>
+            </div>
+          </div>
+
+          <div id="chatMessages" class="messages">
+            <div class="message assistant">Choose a chatbot surface, sign in with an eligible role, then start testing.</div>
+          </div>
+
+          <div class="quick-actions" id="quickActions">
+            <button data-prompt="What services does the hospital provide?">Hospital services</button>
+            <button data-prompt="How can I book an appointment?">Book appointment</button>
+            <button data-prompt="Show my profile">My profile</button>
+            <button data-prompt="Show my lab reports">My lab reports</button>
+          </div>
+
+          <form id="chatForm" class="chat-form">
+            <input id="chatInput" placeholder="Ask the patient assistant..." disabled>
+            <button id="sendBtn" type="submit" disabled>Send</button>
+          </form>
+        </article>
+
+        <aside class="right-rail">
+          <article class="panel">
+            <h2>Allowed Tools</h2>
+            <p class="muted">Tools update after login based on RBAC.</p>
+            <div id="toolsList" class="tools-list">
+              <span>Sign in to view tools</span>
+            </div>
+          </article>
+
+          <article class="panel">
+            <h2>Direct Tool Test</h2>
+            <p class="muted">Useful for security testing without the model in the loop.</p>
+            <label for="toolSelect">Tool</label>
+            <select id="toolSelect" disabled></select>
+            <label for="toolArgs">Arguments JSON</label>
+            <textarea id="toolArgs" rows="5" disabled>{"patient_id": 1}</textarea>
+            <button id="invokeBtn" disabled>Invoke tool</button>
+            <pre id="toolOutput">No tool result yet.</pre>
+          </article>
+        </aside>
+      </section>
+    </section>
+  </main>
+
+  <script src="/static/app.js?v=vault-6"></script>
+</body>
+
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Document Vault</title>
+  <link rel="stylesheet" href="/static/style.css?v=vault-7">
+</head>
+
+<body data-chatbot="management">
+  <main class="shell vault-shell">
+    <section class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">+</div>
+        <div>
+          <h1>Document Vault</h1>
+          <p>Approved confidential documents</p>
+        </div>
+      </div>
+
+      <form id="vaultLoginForm" class="panel login-panel">
+        <h2>Vault Sign In</h2>
+        <label for="vaultUser">Username</label>
+        <input id="vaultUser" autocomplete="username" value="supervisor1">
+        <label for="vaultPass">Password</label>
+        <input id="vaultPass" type="password" autocomplete="current-password" value="Supervisor@123">
+        <button type="submit" id="vaultLoginBtn">Sign in to vault</button>
+        <p id="vaultLoginError" class="error" hidden>Vault login failed or role not allowed.</p>
+      </form>
+
+      <div class="panel">
+        <h2>Vault Demo Accounts</h2>
+        <div class="account-grid">
+          <button type="button" data-vault-user="admin" data-vault-pass="Admin@123">admin - SUPER_ADMIN</button>
+          <button type="button" data-vault-user="supervisor1" data-vault-pass="Supervisor@123">supervisor1 - HOSPITAL_SUPERVISOR</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Allowed Roles</h2>
+        <p class="access-note">SUPER_ADMIN can view approved vault documents. HOSPITAL_SUPERVISOR can view only their own approved documents.</p>
+      </div>
+
+      <div class="panel surface-links">
+        <a href="/management">Back to Management</a>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Secure document access</p>
+          <h2>Secure Document Vault</h2>
+          <p class="topbar-copy">Confidential generated documents are available here only after admin approval.</p>
+        </div>
+        <div class="session-card">
+          <span class="status-dot" id="vaultStatusDot"></span>
+          <div>
+            <strong id="vaultSessionName">Not signed in</strong>
+            <small id="vaultSessionRole">Vault locked</small>
+          </div>
+        </div>
+      </header>
+
+      <section class="vault-grid">
+        <article class="panel">
+          <div class="section-head">
+            <div>
+              <h2>Approved Documents</h2>
+              <p class="muted">Documents appear here only after SUPER_ADMIN approval.</p>
+            </div>
+            <button type="button" id="refreshVaultBtn" disabled>Refresh</button>
+          </div>
+          <div id="vaultDocs" class="vault-docs">
+            <span class="muted">Sign in to view approved documents.</span>
+          </div>
+        </article>
+
+        <article class="panel vault-viewer">
+          <div class="section-head">
+            <div>
+              <h2 id="vaultDocTitle">Document Viewer</h2>
+              <p id="vaultDocMeta" class="muted">Select an approved document.</p>
+            </div>
+          </div>
+          <pre id="vaultDocContent">No document selected.</pre>
+        </article>
+      </section>
+    </section>
+  </main>
+
+  <script src="/static/vault.js?v=vault-7"></script>
+</body>
+
+</html>
