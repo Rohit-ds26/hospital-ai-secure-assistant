@@ -272,41 +272,8 @@ Vault behavior:
 - After approval, supervisor signs into `/vault` again to view their own approved docs.
 - Admin signs into `/vault` to view all approved docs.
 
-## 8. Supervisor Document Types
-
-Supervisor can create these secure document requests:
-
-| Document Type | Description | Requires Patient ID |
-|---|---|---|
-| `patient_full_records` | Full patient document: profile, appointments, medical records, prescriptions, lab reports, billing, insurance | Yes |
-| `hospital_billing_records` | All hospital billing records and billing summary | No |
-| `patient_lab_reports` | All lab reports for one patient | Yes |
-| `patient_insurance_details` | Insurance details and claims for one patient | Yes |
-| `patient_records_summary` | Monthly patient activity summary document | No |
-
-Example supervisor chat prompts:
-
-```text
-Create full patient records document for patient 1
-Create all hospital billing records document
-Create lab reports document for patient 1
-Create insurance details document for patient 1
-Create a secure document for last month patient records
-Show my document requests
-Show approved document 1
-```
-
-Example admin chat prompts:
-
-```text
-Show pending document requests
-Approve document request 1
-Reject document request 1
-Show hospital analytics
-Show audit logs
-```
-
-## 9. API Endpoints
+ 
+## 8. API Endpoints
 
 | Method | Endpoint | Auth | Description |
 |---|---|---|---|
@@ -328,124 +295,8 @@ Show audit logs
 | `POST` | `/mcp/sse/message` | Yes/token query | MCP SSE message endpoint |
 | `GET` | `/vault/docs` | Yes | List approved vault docs |
 | `GET` | `/vault/docs/{request_id}` | Yes | Read approved vault doc |
-
-## 10. API Testing Examples
-
-### Login
-
-```powershell
-$login = Invoke-RestMethod -Method Post `
-  -Uri http://127.0.0.1:8000/auth/login `
-  -ContentType "application/json" `
-  -Body '{"username":"admin","password":"Admin@123"}'
-
-$token = $login.access_token
-```
-
-### List Tools For Role
-
-```powershell
-Invoke-RestMethod `
-  -Uri http://127.0.0.1:8000/mcp/tools `
-  -Headers @{ Authorization = "Bearer $token" }
-```
-
-### Public Patient Chat
-
-```powershell
-Invoke-RestMethod -Method Post `
-  -Uri http://127.0.0.1:8000/chat/patient `
-  -ContentType "application/json" `
-  -Body '{"user_prompt":"What lab services are available?"}'
-```
-
-### Signed-In Patient Chat
-
-```powershell
-$patient = Invoke-RestMethod -Method Post `
-  -Uri http://127.0.0.1:8000/auth/login `
-  -ContentType "application/json" `
-  -Body '{"username":"patient1","password":"Patient@123"}'
-
-Invoke-RestMethod -Method Post `
-  -Uri http://127.0.0.1:8000/chat/patient `
-  -Headers @{ Authorization = "Bearer $($patient.access_token)" } `
-  -ContentType "application/json" `
-  -Body '{"user_prompt":"Show my profile"}'
-```
-
-### Supervisor Creates Secure Document Request
-
-```powershell
-$sup = Invoke-RestMethod -Method Post `
-  -Uri http://127.0.0.1:8000/auth/login `
-  -ContentType "application/json" `
-  -Body '{"username":"supervisor1","password":"Supervisor@123"}'
-
-Invoke-RestMethod -Method Post `
-  -Uri http://127.0.0.1:8000/mcp/invoke `
-  -Headers @{ Authorization = "Bearer $($sup.access_token)" } `
-  -ContentType "application/json" `
-  -Body '{"tool_name":"create_secure_document_request","arguments":{"document_type":"patient_lab_reports","patient_id":1}}'
-```
-
-### Admin Approves Request
-
-```powershell
-$admin = Invoke-RestMethod -Method Post `
-  -Uri http://127.0.0.1:8000/auth/login `
-  -ContentType "application/json" `
-  -Body '{"username":"admin","password":"Admin@123"}'
-
-Invoke-RestMethod -Method Post `
-  -Uri http://127.0.0.1:8000/mcp/invoke `
-  -Headers @{ Authorization = "Bearer $($admin.access_token)" } `
-  -ContentType "application/json" `
-  -Body '{"tool_name":"approve_report_request","arguments":{"request_id":1}}'
-```
-
-### View Vault Docs
-
-```powershell
-Invoke-RestMethod `
-  -Uri http://127.0.0.1:8000/vault/docs `
-  -Headers @{ Authorization = "Bearer $($admin.access_token)" }
-```
-
-## 11. AI Provider Configuration
-
-Default local/demo mode:
-
-```env
-HOSPITAL_AI_PROVIDER=mock
-```
-
-OpenAI:
-
-```env
-HOSPITAL_AI_PROVIDER=openai
-OPENAI_API_KEY=your_key
-OPENAI_MODEL=gpt-4.1-mini
-```
-
-Gemini:
-
-```env
-HOSPITAL_AI_PROVIDER=gemini
-GOOGLE_API_KEY=your_key
-GEMINI_MODEL=gemini-2.0-flash
-```
-
-Vertex AI:
-
-```env
-HOSPITAL_AI_PROVIDER=vertex
-VERTEX_PROJECT_ID=your_project
-VERTEX_LOCATION=us-central1
-GOOGLE_APPLICATION_CREDENTIALS=service_account.json
-```
-
-## 12. Database
+ 
+## 9. Database
 
 Main SQLite database:
 
@@ -477,7 +328,7 @@ Important tables include:
 
 `management_report_requests` stores metadata for secure document requests. The confidential document body is stored in `secure_vault/`.
 
-## 13. Security Model
+## 10. Security Model
 
 - JWT authentication
 - Role-based access control
@@ -491,7 +342,7 @@ Important tables include:
 - Prompt filtering blocks obvious prompt-injection attempts
 - Audit logs record tool execution attempts
 
-## 14. Recommended Demo Flow
+## 11. Recommended Demo Flow
 
 1. Open `/patient`.
 2. Ask public question without login:
@@ -527,45 +378,4 @@ Important tables include:
 11. Sign in as `supervisor1` to see own approved docs.
 12. Sign in as `admin` to see all approved docs.
 
-## 15. Development Notes
-
-Useful checks:
-
-```powershell
-.\.venv\Scripts\python.exe -m py_compile app.py api\chat_api.py api\vault_api.py services\tool_router.py tools\admin_tools.py
-```
-
-Run with reload during development:
-
-```powershell
-.\.venv\Scripts\python.exe -m uvicorn app:app --host 127.0.0.1 --port 8000 --reload
-```
-
-If browser UI looks stale, hard refresh:
-
-```text
-Ctrl + F5
-```
-
-## 16. Cleanup Candidates
-
-These files/folders are development artifacts and are safe candidates for deletion before sharing the project, but do not delete them if you want to keep local test history:
-
-- `test_quick.py`
-- `test_phase1.py`
-- `test_advanced.py`
-- `test_out.txt`
-- `test_out_new.txt`
-- all `__pycache__/` folders
-- `.venv/`
-- `.venv312/`
-- `hospital.db`
-- `secure_vault/`
-
-If you delete `hospital.db`, run:
-
-```powershell
-.\setup.ps1 -ResetDb
-```
-
-If you delete `secure_vault/`, it will be recreated by setup or when a new vault document is generated.
+ 
